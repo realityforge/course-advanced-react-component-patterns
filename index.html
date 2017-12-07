@@ -97,37 +97,38 @@
       [TOGGLE_CONTEXT]: PropTypes.object.isRequired
     };
 
+    Wrapper.displayName = `withToggle(${Component.displayName || Component.name})`;
     return Wrapper;
   }
 
-  const ToggleOn = withToggle(({ toggle: { on }, children }) => {
+  const ToggleOn = ({ toggle: { on }, children }) => {
     return on ? children : null;
-  });
+  };
 
   ToggleOn.contextTypes = {
     [TOGGLE_CONTEXT]: PropTypes.object.isRequired
   };
 
-  const ToggleOff = withToggle(({ toggle: { on }, children }) => {
+  const ToggleOff = ({ toggle: { on }, children }) => {
     return on ? null : children;
-  });
+  };
 
   ToggleOff.contextTypes = {
     [TOGGLE_CONTEXT]: PropTypes.object.isRequired
   };
 
-  const ToggleButton = withToggle(({ toggle: { on, toggle }, ...props }) => {
+  const ToggleButton = ({ toggle: { on, toggle }, ...props }) => {
     return <Switch on={on} onClick={toggle} {...props}/>;
-  });
+  };
 
   ToggleButton.contextTypes = {
     [TOGGLE_CONTEXT]: PropTypes.object.isRequired
   };
 
   class Toggle extends React.Component {
-    static On = ToggleOn;
-    static Off = ToggleOff;
-    static Button = ToggleButton;
+    static On = withToggle(ToggleOn);
+    static Off = withToggle(ToggleOff);
+    static Button = withToggle(ToggleButton);
     static defaultProps = { onToggle: () => {} };
     static childContextTypes = {
       [TOGGLE_CONTEXT]: PropTypes.object.isRequired
