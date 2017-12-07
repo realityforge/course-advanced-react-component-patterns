@@ -173,20 +173,22 @@
     }
   );
 
-  function App() {
-    return (
-      <Toggle onToggle={on => console.log('toggle', on)}>
-        <Toggle.On>The button is on</Toggle.On>
-        <div>
-          <Toggle.Off>The button is off</Toggle.Off>
-          <Toggle.Button/>
-        </div>
-        <hr/>
-        <MyToggleWrapper/>
-        <hr/>
-        <MyEventComponent event="onClick" on={e => alert(e.type)}/>
-      </Toggle>
-    );
+  class App extends React.Component {
+    render() {
+      return (
+        <Toggle>
+          <Toggle.On>The button is on</Toggle.On>
+          <div>
+            <Toggle.Off>The button is off</Toggle.Off>
+            <Toggle.Button/>
+          </div>
+          <hr/>
+          <MyToggleWrapper/>
+          <hr/>
+          <MyEventComponent event="onClick" on={e => alert(e.type)}/>
+        </Toggle>
+      );
+    }
   }
 
   /*
