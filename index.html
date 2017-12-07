@@ -88,9 +88,7 @@
     static defaultProps = { onToggle: () => {} };
     state = { on: false };
     toggle = () =>
-      this.setState(
-        ({ on }) => ({ on: !on }),
-        () => {
+      this.setState(({ on }) => ({ on: !on }), () => {
           this.props.onToggle(this.state.on);
         }
       );
@@ -128,9 +126,7 @@
           type="checkbox"
         />
         <button
-          className={`${className} toggle-btn ${on
-            ? 'toggle-btn-on'
-            : 'toggle-btn-off'}`}
+          className={`${className} toggle-btn ${on ? 'toggle-btn-on' : 'toggle-btn-off'}`}
           aria-expanded={on}
           {...props}
         />
