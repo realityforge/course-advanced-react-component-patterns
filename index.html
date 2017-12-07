@@ -84,23 +84,25 @@
 <div id="⚛️"></div>
 
 <script type="text/babel">
+  const compose = (...fns) => (...args) => fns.forEach(fn => fn && fn(...args));
+
   class Toggle extends React.Component {
     static defaultProps = { onToggle: () => {} };
     state = { on: false };
     toggle = () => this.setState(({ on }) => ({ on: !on }), () => this.props.onToggle(this.state.on));
+    getTogglerProps = ({ onClick, ...props } = {}) => {
+      return {
+        'aria-expanded': this.state.on,
+        onClick: compose(onClick, this.toggle),
+        ...props
+      };
+    };
 
     render() {
       return this.props.render({
         on: this.state.on,
         toggle: this.toggle,
-        /*
-         * toggleProps is a props collection which are basically a bunch of props that are typically
-         * passed as a group to child components.
-         */
-        togglerProps: {
-          'aria-expanded': this.state.on,
-          onClick: this.toggle
-        }
+        getTogglerProps: this.getTogglerProps
       });
     }
   }
@@ -109,11 +111,11 @@
     return (
       <Toggle
         onToggle={on => console.log('toggle', on)}
-        render={({ on, toggle, togglerProps }) => (
+        render={({ on, toggle, getTogglerProps }) => (
           <div>
-            <Switch on={on} {...togglerProps} />
+            <Switch on={on} {...getTogglerProps()}/>
             <hr/>
-            <button {...togglerProps}>{on ? 'on' : 'off'}</button>
+            <button {...getTogglerProps({ onClick: () => alert('hi'), id: 'hi' })}>{on ? 'on' : 'off'}</button>
           </div>
         )}
       />
