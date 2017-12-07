@@ -81,6 +81,7 @@
 <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/prop-types@15.6.0/prop-types.js"></script>
 <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+<script src="https://cdn.rawgit.com/kentcdodds/ea2fdfc82f79228a6be641c78dc0e1b9/raw/0f792eb8dfb3bf993bdf50c9656f12090ed344e6/hoist-non-react-statics.umd.js"></script>
 
 <div id="⚛️"></div>
 
@@ -103,7 +104,13 @@
      * without mocking out the context.
      */
     Wrapper.WrappedComponent = Component;
-    return Wrapper;
+
+    /*
+     * Handle all the non-react statics. So anything that is not part of react is exposed to consumers
+     * of the wrapped component. This is done so what the consumer can not tell the difference between
+     * using the HOC and the underlying component.
+     */
+    return hoistNonReactStatics(Wrapper, Component);
   }
 
   const ToggleOn = ({ toggle: { on }, children }) => {
@@ -157,6 +164,8 @@
   }
 
   class MyToggle extends React.Component {
+    static ToggleMessage = withToggle(({ toggle: { on } }) => on ? 'Warning: The button is toggled on' : null);
+
     focus = () => this.button.focus();
 
     render() {
@@ -191,6 +200,8 @@
           <MyToggleWrapper innerRef={myToggle => this.myToggle = myToggle}/>
           <hr/>
           <MyEventComponent event="onClick" on={e => alert(e.type)}/>
+          <hr/>
+          <MyToggleWrapper.ToggleMessage/>
         </Toggle>
       );
     }
@@ -214,6 +225,7 @@
   }
 
   test();
+
   /*
    *
    *
