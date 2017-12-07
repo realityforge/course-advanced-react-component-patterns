@@ -1,0 +1,7 @@
+{
+  "vendor/advanced-react-patterns": {
+    "url": "https://github.com/kentcdodds/advanced-react-patterns.git",
+    "branch": "master",
+    "revision": "736bc941e629af5acae2e827356d6996e923780e"
+  }
+}
