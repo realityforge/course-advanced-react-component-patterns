@@ -98,6 +98,11 @@
     };
 
     Wrapper.displayName = `withToggle(${Component.displayName || Component.name})`;
+    /*
+     * Record the wrapped component. The goal of this is to enable testing of the inner component
+     * without mocking out the context.
+     */
+    Wrapper.WrappedComponent = Component;
     return Wrapper;
   }
 
@@ -191,6 +196,24 @@
     }
   }
 
+  function test() {
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    const toggle = () => (toggle.called = true);
+    // Note the use of MyToggleWrapper.WrappedComponent wrapped component
+    ReactDOM.render(<MyToggleWrapper.WrappedComponent toggle={{ on: true, toggle }}/>, div);
+    if (!div.innerHTML.includes('on')) {
+      throw new Error(`Contents are wrong: ${div.innerHTML}`);
+    }
+    const button = div.getElementsByTagName('button')[0];
+    button.click();
+    if (!toggle.called) {
+      throw new Error('toggle not called!');
+    }
+    document.body.removeChild(div);
+  }
+
+  test();
   /*
    *
    *
