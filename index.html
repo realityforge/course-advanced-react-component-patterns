@@ -151,9 +151,11 @@
     }
   }
 
-  const MyToggle = withToggle(({ toggle: { on, toggle } }) => (
-    <button onClick={toggle}>{on ? 'on' : 'off'}</button>
-  ));
+  function MyToggle({ toggle: { on, toggle } }) {
+    return <button onClick={toggle}>{on ? 'on' : 'off'}</button>;
+  }
+
+  const MyToggleWrapper = withToggle(MyToggle);
 
   const MyEventComponent = withToggle(
     function MyEventComponent({ toggle, on, event }) {
@@ -177,7 +179,7 @@
           <Toggle.Button/>
         </div>
         <hr/>
-        <MyToggle/>
+        <MyToggleWrapper/>
         <hr/>
         <MyEventComponent event="onClick" on={e => alert(e.type)}/>
       </Toggle>
